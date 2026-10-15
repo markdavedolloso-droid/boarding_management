@@ -158,7 +158,7 @@ $payments = $stmt->fetchAll();
             <?php endforeach; ?>
             <?php if (!$monthlyTotals): ?><p class="empty-state">No paid rent recorded in the past six months.</p><?php endif; ?>
         </section>
-        <section class="panel">
+        <section class="panel history-panel">
             <div class="panel-head"><div><h2>Payments in selected period</h2><p>Up to 100 most recent results.</p></div></div>
             <table><thead><tr><th>Date</th><th>Tenant</th><th>Room</th><th>Billing month</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead><tbody>
                 <?php foreach ($payments as $payment): ?><tr><td><?= htmlspecialchars($payment['payment_date'], ENT_QUOTES, 'UTF-8') ?></td><td><?= htmlspecialchars($payment['first_name'] . ' ' . $payment['last_name'], ENT_QUOTES, 'UTF-8') ?></td><td><?= htmlspecialchars($payment['room_number'], ENT_QUOTES, 'UTF-8') ?></td><td><?= htmlspecialchars($payment['billing_month'], ENT_QUOTES, 'UTF-8') ?></td><td>₱<?= number_format((float) $payment['amount'], 2) ?></td><td><?= htmlspecialchars($payment['payment_method'], ENT_QUOTES, 'UTF-8') ?></td><td><?= htmlspecialchars(ucfirst($payment['payment_status']), ENT_QUOTES, 'UTF-8') ?></td></tr><?php endforeach; ?>

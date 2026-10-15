@@ -173,7 +173,7 @@ $contracts = $stmt->fetchAll();
                 <button type="submit" <?= (!$tenants || !$rooms) ? 'disabled' : '' ?>>Create contract</button>
             </form>
         </section>
-        <section class="panel">
+        <section class="panel history-panel">
             <div class="panel-head"><div><h2>Contract records</h2><p><?= count($contracts) ?> agreements.</p></div></div>
             <table><thead><tr><th>Tenant</th><th>Room</th><th>Monthly rent</th><th>Start</th><th>End</th><th>Status</th><th>Action</th></tr></thead><tbody>
                 <?php foreach ($contracts as $contract): ?>

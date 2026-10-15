@@ -122,10 +122,10 @@ $payments = $stmt->fetchAll();
         <?php if ($message !== ''): ?><div class="alert" role="status"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></div><?php endif; ?>
         <section class="panel">
             <div class="panel-head"><div><h2>Record a payment</h2><p>Payments cannot exceed the remaining rent for that month.</p></div></div>
-            <?php if (!$contracts): ?><p class="alert">Create a rental contract before recording payments.</p><?php endif; ?>
+            <?php if (!$contracts): ?><p class="alert">No rental contracts are available for this property yet. Add a room, then create a contract for the tenant to make them appear here. <a href="contracts.php">Go to Contracts</a>.</p><?php endif; ?>
             <form method="POST" class="form-grid">
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(staywise_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
-                <label>Tenant and room<select name="contract_id" required><option value="">Choose a contract</option><?php foreach ($contracts as $contract): ?><option value="<?= (int) $contract['contract_id'] ?>"><?= htmlspecialchars($contract['first_name'] . ' ' . $contract['last_name'] . ' · Room ' . $contract['room_number'], ENT_QUOTES, 'UTF-8') ?> · ₱<?= number_format((float) $contract['monthly_rent'], 2) ?>/month</option><?php endforeach; ?></select></label>
+                <label>Tenant and room (from rental contracts)<select name="contract_id" required <?= !$contracts ? 'disabled' : '' ?>><option value="">Choose a contract</option><?php foreach ($contracts as $contract): ?><option value="<?= (int) $contract['contract_id'] ?>"><?= htmlspecialchars($contract['first_name'] . ' ' . $contract['last_name'] . ' · Room ' . $contract['room_number'], ENT_QUOTES, 'UTF-8') ?> · ₱<?= number_format((float) $contract['monthly_rent'], 2) ?>/month</option><?php endforeach; ?></select></label>
                 <label>Payment date<input type="date" name="payment_date" value="<?= date('Y-m-d') ?>" required></label>
                 <label>Billing month<input type="date" name="billing_month" value="<?= date('Y-m-01') ?>" required></label>
                 <label>Amount<input type="number" name="amount" min="0.01" step="0.01" required></label>
@@ -133,7 +133,7 @@ $payments = $stmt->fetchAll();
                 <button type="submit" <?= !$contracts ? 'disabled' : '' ?>>Save payment</button>
             </form>
         </section>
-        <section class="panel">
+        <section class="panel history-panel">
             <div class="panel-head"><div><h2>Payment history</h2><p>Latest 100 recorded payments.</p></div></div>
             <table><thead><tr><th>Date</th><th>Tenant</th><th>Room</th><th>Billing month</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead><tbody>
                 <?php foreach ($payments as $payment): ?>

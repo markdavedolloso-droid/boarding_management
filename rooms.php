@@ -99,7 +99,7 @@ $rooms = $stmt->fetchAll();
                 <button type="submit">Add room</button>
             </form>
         </section>
-        <section class="panel">
+        <section class="panel room-directory">
             <div class="panel-head"><div><h2>Room directory</h2><p><?= count($rooms) ?> rooms registered. Occupancy and availability update automatically from rental contracts.</p></div></div>
             <table>
                 <thead><tr><th>Room</th><th>Floor</th><th>Capacity</th><th>Occupancy</th><th>Available spaces</th><th>Monthly rent</th><th>Availability</th><th>Room condition</th></tr></thead>

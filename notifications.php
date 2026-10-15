@@ -178,22 +178,22 @@ if ($currentUser['role'] === 'tenant') {
         <header class="topbar"><p class="topbar-label">StayWise <span aria-hidden="true">/</span> Notifications</p><span class="topbar-user"><?= htmlspecialchars($currentUser['name'], ENT_QUOTES, 'UTF-8') ?></span></header>
         <div class="page-head"><div><p class="eyebrow">In-app updates</p><h1>Notifications</h1><p><?= $currentUser['role'] === 'owner' ? 'Send announcements and review automatic payment reminders.' : 'Announcements and payment reminders from your manager.' ?></p></div></div>
         <?php if ($message !== ''): ?><div class="alert" role="status"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></div><?php endif; ?>
+        <section class="panel notifications-panel">
         <?php if ($currentUser['role'] === 'owner'): ?>
-            <section class="panel">
-                <div class="panel-head"><div><h2>Send an announcement</h2><p>Notifications are delivered in the tenant portal.</p></div></div>
-                <form method="POST">
-                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(staywise_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
-                    <input type="hidden" name="action" value="send">
-                    <label for="tenant_id">Recipients</label>
-                    <select id="tenant_id" name="tenant_id"><option value="all">All tenants</option><?php foreach ($tenantOptions as $tenant): ?><option value="<?= (int) $tenant['tenant_id'] ?>"><?= htmlspecialchars($tenant['first_name'] . ' ' . $tenant['last_name'], ENT_QUOTES, 'UTF-8') ?></option><?php endforeach; ?></select>
-                    <label for="title">Title</label><input id="title" name="title" maxlength="150" required>
-                    <label for="message">Message</label><textarea id="message" name="message" rows="4" maxlength="5000" required></textarea>
-                    <button type="submit" <?= !$tenantOptions ? 'disabled' : '' ?>>Send notification</button>
-                </form>
-            </section>
+            <div class="panel-head"><div><h2>Send an announcement</h2><p>Notifications are delivered in the tenant portal.</p></div></div>
+            <form method="POST" class="notification-compose-form">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(staywise_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
+                <input type="hidden" name="action" value="send">
+                <label for="tenant_id">Recipients</label>
+                <select id="tenant_id" name="tenant_id"><option value="all">All tenants</option><?php foreach ($tenantOptions as $tenant): ?><option value="<?= (int) $tenant['tenant_id'] ?>"><?= htmlspecialchars($tenant['first_name'] . ' ' . $tenant['last_name'], ENT_QUOTES, 'UTF-8') ?></option><?php endforeach; ?></select>
+                <label for="title">Title</label><input id="title" name="title" maxlength="150" required>
+                <label for="message">Message</label><textarea id="message" name="message" rows="4" maxlength="5000" required></textarea>
+                <button type="submit" <?= !$tenantOptions ? 'disabled' : '' ?>>Send notification</button>
+            </form>
         <?php endif; ?>
-        <section class="panel">
+            <div class="notification-list-head">
             <div class="panel-head"><div><h2><?= $currentUser['role'] === 'owner' ? 'Recent notifications' : 'Your notifications' ?></h2><p><?= count($notifications) ?> recent items.</p></div></div>
+            </div>
             <?php foreach ($notifications as $notification): ?>
                 <article class="notification-item <?= $notification['status'] === 'unread' ? 'is-unread' : '' ?>">
                     <div>
@@ -209,7 +209,7 @@ if ($currentUser['role'] === 'tenant') {
                             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(staywise_csrf_token(), ENT_QUOTES, 'UTF-8') ?>">
                             <input type="hidden" name="action" value="read">
                             <input type="hidden" name="notification_id" value="<?= (int) $notification['notification_id'] ?>">
-                            <button type="submit">Mark read</button>
+                            <button type="submit">Mark as read</button>
                         </form>
                     <?php endif; ?>
                 </article>

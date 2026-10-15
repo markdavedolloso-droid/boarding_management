@@ -127,7 +127,7 @@ $bills = $stmt->fetchAll();
                 <button type="submit" <?= !$contracts ? 'disabled' : '' ?>>Save bill</button>
             </form>
         </section>
-        <section class="panel">
+        <section class="panel history-panel">
             <div class="panel-head"><div><h2>Bill history</h2><p><?= count($bills) ?> utility bills.</p></div></div>
             <table><thead><tr><th>Tenant</th><th>Room</th><th>Billing month</th><th>Electricity</th><th>Water</th><th>Total</th><th>Due date</th><th>Status</th><th>Action</th></tr></thead><tbody>
                 <?php foreach ($bills as $bill): ?>

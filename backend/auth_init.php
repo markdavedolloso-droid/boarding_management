@@ -186,6 +186,22 @@ $stmt = $pdo->prepare(
 $stmt->execute();
 }
 
+$pdo->exec(
+    "CREATE TABLE IF NOT EXISTS activity_logs_archive (
+        archive_id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        original_log_id BIGINT UNSIGNED NOT NULL UNIQUE,
+        owner_id INT UNSIGNED NOT NULL,
+        user_id INT UNSIGNED NOT NULL,
+        actor_name VARCHAR(150) NOT NULL,
+        actor_email VARCHAR(190) NOT NULL,
+        activity VARCHAR(255) NOT NULL,
+        created_at TIMESTAMP NOT NULL,
+        archived_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        KEY idx_activity_archive_owner_date (owner_id, created_at),
+        KEY idx_activity_archive_owner_activity (owner_id, activity)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+);
+
 function require_staywise_login(): void
 {
     if (empty($_SESSION['staywise_user'])) {
@@ -275,4 +291,61 @@ function log_staywise_activity(string $activity): void
         ':user_id' => $_SESSION['staywise_user']['id'],
         ':activity' => $activity,
     ]);
+    archive_staywise_old_activity_logs((int) $_SESSION['staywise_user']['owner_id']);
+}
+
+function archive_staywise_old_activity_logs(int $ownerId): void
+{
+    global $pdo;
+    $pdo->beginTransaction();
+    try {
+        $stmt = $pdo->prepare(
+            'SELECT log_id FROM activity_logs
+             WHERE owner_id = :owner_id
+             ORDER BY log_id DESC LIMIT 1 OFFSET 14'
+        );
+        $stmt->execute([':owner_id' => $ownerId]);
+        $cutoffLogId = $stmt->fetchColumn();
+        if ($cutoffLogId === false) {
+            $pdo->commit();
+            return;
+        }
+
+        $stmt = $pdo->prepare(
+            'INSERT IGNORE INTO activity_logs_archive
+                (original_log_id, owner_id, user_id, actor_name, actor_email, activity, created_at)
+             SELECT l.log_id, l.owner_id, l.user_id, u.full_name, u.email, l.activity, l.created_at
+             FROM activity_logs l
+             JOIN app_users u ON u.user_id = l.user_id
+             WHERE l.owner_id = :owner_id AND l.log_id < :cutoff_log_id'
+        );
+        $stmt->execute([':owner_id' => $ownerId, ':cutoff_log_id' => $cutoffLogId]);
+
+        $stmt = $pdo->prepare(
+            'DELETE FROM activity_logs
+             WHERE owner_id = :owner_id AND log_id < :cutoff_log_id'
+        );
+        $stmt->execute([':owner_id' => $ownerId, ':cutoff_log_id' => $cutoffLogId]);
+        $pdo->commit();
+    } catch (Throwable $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        throw $e;
+    }
+}
+
+$archiveMigrationVersion = (int) ($pdo->query(
+    "SELECT meta_value FROM app_meta WHERE meta_key = 'activity_archive_version'"
+)->fetchColumn() ?: 0);
+if ($archiveMigrationVersion < 1) {
+    $ownerIds = $pdo->query('SELECT DISTINCT owner_id FROM activity_logs')->fetchAll(PDO::FETCH_COLUMN);
+    foreach ($ownerIds as $ownerId) {
+        archive_staywise_old_activity_logs((int) $ownerId);
+    }
+    $stmt = $pdo->prepare(
+        "INSERT INTO app_meta (meta_key, meta_value) VALUES ('activity_archive_version', '1')
+         ON DUPLICATE KEY UPDATE meta_value = VALUES(meta_value)"
+    );
+    $stmt->execute();
 }
