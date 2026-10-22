@@ -409,7 +409,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Backup and restore · StayWise</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=20261021-public-home">
+    <link rel="stylesheet" href="assets/css/style.css?v=20261022-no-sidebar-icons">
 </head>
 <body>
     <?php require __DIR__ . '/Include/sidebar.php'; ?>

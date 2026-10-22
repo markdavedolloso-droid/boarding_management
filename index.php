@@ -18,7 +18,7 @@ if (empty($_SESSION['staywise_user'])):
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="StayWise makes boarding house management easier with organized tenant records, rooms, rental contracts, and payments.">
     <title>StayWise · Boarding house management</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=20261021-public-home">
+    <link rel="stylesheet" href="assets/css/style.css?v=20261022-no-sidebar-icons">
     <link rel="stylesheet" href="assets/css/landing.css?v=20261021-orbit3">
 </head>
 <body class="landing-page">
@@ -418,7 +418,7 @@ if ($currentUser['role'] === 'tenant') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>StayWise · Dashboard</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=20261021-public-home">
+    <link rel="stylesheet" href="assets/css/style.css?v=20261022-no-sidebar-icons">
 </head>
 <body>
     <?php require __DIR__ . '/Include/sidebar.php'; ?>

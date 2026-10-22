@@ -9,7 +9,7 @@ $currentUser = $_SESSION['staywise_user'] ?? [];
 </button>
 <button class="nav-backdrop" type="button" aria-label="Close navigation menu" hidden></button>
 <nav id="main-navigation" aria-label="Main navigation">
-    <a href="index.php" class="<?= $activePage === 'overview' ? 'active' : '' ?>" <?= $activePage === 'overview' ? 'aria-current="page"' : '' ?>>Overview</a>
+    <a href="index.php" class="<?= $activePage === 'overview' ? 'active' : '' ?>" <?= $activePage === 'overview' ? 'aria-current="page"' : '' ?>>Dashboard</a>
     <?php if (($currentUser['role'] ?? '') === 'owner'): ?>
         <a href="view_tenants.php" class="<?= $activePage === 'tenants' ? 'active' : '' ?>" <?= $activePage === 'tenants' ? 'aria-current="page"' : '' ?>>Tenants</a>
         <a href="rooms.php" class="<?= $activePage === 'rooms' ? 'active' : '' ?>" <?= $activePage === 'rooms' ? 'aria-current="page"' : '' ?>>Rooms</a>

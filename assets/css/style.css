@@ -80,7 +80,6 @@ nav::before {
 nav a {
     display: flex;
     align-items: center;
-    gap: 12px;
     padding: 13px 14px;
     border: 1px solid transparent;
     border-radius: 11px;
@@ -90,13 +89,9 @@ nav a {
     transition: color 0.2s, background 0.2s, border-color 0.2s;
 }
 
-nav a::before {
-    width: 7px;
-    height: 7px;
-    border: 1.5px solid currentColor;
-    border-radius: 2px;
-    content: "";
-    opacity: 0.8;
+nav#main-navigation > a::before {
+    display: none;
+    content: none;
 }
 
 nav a:hover,
@@ -1058,10 +1053,6 @@ form .button {
         flex: 0 0 auto;
         padding: 13px 14px;
         font-size: 14px;
-    }
-
-    nav a::before {
-        display: block;
     }
 
     .nav-toggle {
