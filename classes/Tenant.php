@@ -1,12 +1,15 @@
 <?php
+require_once __DIR__ . '/../connection.php';
+
 class Tenant
 {
-    private PDO $conn;
-    private string $table = 'tenants';
+    private $conn;
+    private $table = 'tenants';
 
-    public function __construct(PDO $pdo)
+    public function __construct()
     {
-        $this->conn = $pdo;
+        $db = new Database();
+        $this->conn = $db->connect();
     }
 
     public function addTenant(int $ownerId, array $data): bool

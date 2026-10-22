@@ -112,7 +112,7 @@ $payments = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Payments · StayWise</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=20261015">
+    <link rel="stylesheet" href="assets/css/style.css?v=20261022-no-sidebar-icons">
 </head>
 <body>
     <?php require __DIR__ . '/Include/sidebar.php'; ?>

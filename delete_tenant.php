@@ -3,7 +3,7 @@ require_once __DIR__ . '/backend/auth_init.php';
 require_staywise_owner();
 require_once __DIR__ . '/classes/Tenant.php';
 
-$tenant = new Tenant($pdo);
+$tenant = new Tenant();
 
 $id = (int) ($_POST['id'] ?? 0);
 

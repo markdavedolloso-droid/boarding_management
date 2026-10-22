@@ -1,5 +1,290 @@
 <?php
 require_once __DIR__ . '/backend/auth_init.php';
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_set_cookie_params([
+        'httponly' => true,
+        'samesite' => 'Lax',
+        'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+    ]);
+    session_start();
+}
+
+if (empty($_SESSION['staywise_user'])):
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="StayWise makes boarding house management easier with organized tenant records, rooms, rental contracts, and payments.">
+    <title>StayWise · Boarding house management</title>
+    <link rel="stylesheet" href="assets/css/style.css?v=20261022-no-sidebar-icons">
+    <link rel="stylesheet" href="assets/css/landing.css?v=20261021-orbit3">
+</head>
+<body class="landing-page">
+    <header class="public-header">
+        <a class="public-brand" href="#home" aria-label="StayWise home">
+            <span class="public-brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none">
+                    <path d="M4 14.5 16 5l12 9.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7.5 13v14h17V13M12 27v-8h8v8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 13h.01M20 13h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            </span>
+            <span>StayWise</span>
+        </a>
+        <button class="public-menu-toggle" type="button" aria-controls="public-navigation" aria-expanded="false" aria-label="Open menu">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="public-nav" id="public-navigation" aria-label="Main navigation">
+            <a href="#home" aria-current="page">Home</a>
+            <a href="#about">About</a>
+            <a href="#team">Team</a>
+            <a href="#contact">Contact</a>
+            <a class="public-login" href="login.php">Log in</a>
+            <a class="public-signup" href="signup.php">Create account</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="landing-hero" id="home">
+            <div class="landing-hero-copy">
+                <p class="landing-kicker">Boarding house management, made simple</p>
+                <h1>Manage smarter.<br><span>Make room for better.</span></h1>
+                <p>StayWise brings your rooms, tenants, rental agreements, and payments together in one clear workspace—so you can spend less time on paperwork and more time caring for your property.</p>
+                <div class="landing-actions">
+                    <a href="signup.php">Get started for free <span aria-hidden="true">→</span></a>
+                    <a class="secondary" href="#features">Explore features</a>
+                </div>
+            </div>
+            <div class="landing-visual" aria-label="Illustration of a well-managed boarding house" role="img">
+                <span class="landing-float landing-float-one">Rooms &amp; tenants, together</span>
+                <span class="landing-float landing-float-two">Your property at a glance</span>
+                <svg class="landing-building" viewBox="0 0 520 390" fill="none" aria-hidden="true">
+                    <ellipse cx="264" cy="351" rx="174" ry="19" fill="#063b2b" fill-opacity=".75"/>
+                    <path d="M111 151 259 48l151 103" stroke="#19bd83" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M137 143v183h243V143" fill="#082c21" stroke="#16875f" stroke-width="2.5"/>
+                    <path d="M165 170h71v66h-71zM281 170h71v66h-71z" fill="#0d5640" stroke="#27c994" stroke-width="2"/>
+                    <path d="M174 181h52M174 191h52M290 181h52M290 191h52" stroke="#80e6bf" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M224 326v-70a36 36 0 0 1 72 0v70" fill="#0b7957" stroke="#27c994" stroke-width="2.5"/>
+                    <path d="M244 288h32" stroke="#c6f8df" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M179 276h30v50h-30zM320 276h30v50h-30z" fill="#0b4032" stroke="#1db77f" stroke-width="2"/>
+                    <path d="M162 143h205" stroke="#31d29a" stroke-opacity=".3" stroke-width="2"/>
+                    <path d="M99 327h286" stroke="#2bbd8a" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="403" cy="96" r="28" fill="#09241d" stroke="#1aa979" stroke-opacity=".7"/>
+                    <path d="M396 96h14M403 89v14" stroke="#45dfae" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="105" cy="207" r="20" fill="#09241d" stroke="#1aa979" stroke-opacity=".65"/>
+                    <path d="M98 207h14M105 200v14" stroke="#45dfae" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="372" cy="263" r="3" fill="#44dfa9"/>
+                    <circle cx="389" cy="263" r="3" fill="#44dfa9" fill-opacity=".55"/>
+                    <circle cx="406" cy="263" r="3" fill="#44dfa9" fill-opacity=".3"/>
+                </svg>
+            </div>
+        </section>
+
+        <div class="landing-ribbon" aria-label="StayWise features">
+            <div class="landing-ribbon-inner">
+                <span>Tenant records</span>
+                <span>Room management</span>
+                <span>Rental contracts</span>
+                <span>Payment tracking</span>
+                <span>Useful reports</span>
+                <span>Tenant updates</span>
+            </div>
+        </div>
+
+        <section class="landing-section" id="about">
+            <div class="landing-about">
+                <div class="landing-about-art" aria-hidden="true">
+                    <svg viewBox="0 0 360 270" fill="none">
+                        <rect x="28" y="28" width="304" height="212" rx="19" fill="#071b15" stroke="#1d7452" stroke-width="2"/>
+                        <path d="M28 75h304" stroke="#1d7452" stroke-width="2"/>
+                        <circle cx="51" cy="52" r="5" fill="#33d69e"/>
+                        <circle cx="69" cy="52" r="5" fill="#208b67"/>
+                        <circle cx="87" cy="52" r="5" fill="#165b45"/>
+                        <rect x="52" y="98" width="112" height="112" rx="12" fill="#0b3023" stroke="#175d43"/>
+                        <path d="M72 130h72M72 151h53M72 172h64" stroke="#4bd8a7" stroke-opacity=".7" stroke-width="7" stroke-linecap="round"/>
+                        <rect x="185" y="100" width="121" height="45" rx="10" fill="#0a3426" stroke="#1c8058"/>
+                        <circle cx="207" cy="122" r="7" fill="#40d99e"/>
+                        <path d="M224 118h63M224 127h45" stroke="#9ae8c7" stroke-opacity=".65" stroke-width="4" stroke-linecap="round"/>
+                        <rect x="185" y="158" width="121" height="51" rx="10" fill="#092b22" stroke="#175d43"/>
+                        <path d="M199 193v-14M213 193v-24M227 193v-18M241 193v-31M255 193v-20M269 193v-27M283 193v-14" stroke="#37ce96" stroke-width="7" stroke-linecap="round"/>
+                        <path d="M51 222h255" stroke="#164632" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="landing-about-copy">
+                    <p class="landing-kicker">The StayWise difference</p>
+                    <h2>Everything in its place. Everyone on the same page.</h2>
+                    <p>Stop juggling paper files and scattered spreadsheets. StayWise gives boarding house owners one dependable place to manage day-to-day records and keep tenants informed.</p>
+                    <ul class="landing-check-list">
+                        <li>Know your rooms, occupancy, and tenant details</li>
+                        <li>Keep contracts, rent, and utility records together</li>
+                        <li>Share important updates through the tenant portal</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="landing-section" id="features">
+            <div class="landing-section-heading">
+                <p class="landing-kicker">A simpler way to stay organized</p>
+                <h2>Tools for the work you do every day.</h2>
+                <p>Manage the essentials from one easy-to-use dashboard, whether you’re at your desk or on your phone.</p>
+            </div>
+            <div class="landing-feature-grid">
+                <article class="landing-feature-card">
+                    <span class="landing-feature-icon" aria-hidden="true">⌂</span>
+                    <h3>Rooms &amp; tenants</h3>
+                    <p>Keep room availability, tenant details, and occupancy information up to date.</p>
+                </article>
+                <article class="landing-feature-card">
+                    <span class="landing-feature-icon" aria-hidden="true">▤</span>
+                    <h3>Contracts &amp; payments</h3>
+                    <p>Record rental agreements, track rent payments, and organize utility bills.</p>
+                </article>
+                <article class="landing-feature-card">
+                    <span class="landing-feature-icon" aria-hidden="true">◉</span>
+                    <h3>Updates &amp; reports</h3>
+                    <p>Send tenant announcements and review clear summaries of your property activity.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="landing-section" id="team">
+            <div class="landing-section-heading">
+                <p class="landing-kicker">One place for both sides</p>
+                <h2>Made for the people who make a house a home.</h2>
+            </div>
+            <div class="landing-role-grid">
+                <article class="landing-role-card">
+                    <h3>For boarding house owners</h3>
+                    <p>Manage rooms, tenant records, rental contracts, payments, bills, and reports in one workspace.</p>
+                </article>
+                <article class="landing-role-card">
+                    <h3>For tenants</h3>
+                    <p>See your rental details, check recent payments, and stay up to date with manager announcements.</p>
+                </article>
+                <article class="landing-role-card">
+                    <h3>For smoother communication</h3>
+                    <p>Keep important property updates accessible without losing track of everyday details.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="landing-section" id="contact">
+            <div class="landing-contact">
+                <div>
+                    <p class="landing-kicker">Ready when you are</p>
+                    <h2>Make property management feel manageable.</h2>
+                    <p>Create your StayWise account to organize your boarding house. Tenants can ask their manager to link their account.</p>
+                </div>
+                <div class="landing-actions">
+                    <a href="signup.php">Get started <span aria-hidden="true">→</span></a>
+                    <a class="secondary" href="login.php">Log in</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="public-footer">
+        <a class="public-brand" href="#home"><span>StayWise</span></a>
+        <p>Boarding house management, made simpler.</p>
+    </footer>
+
+    <script>
+    (() => {
+        const toggle = document.querySelector('.public-menu-toggle');
+        const navigation = document.getElementById('public-navigation');
+        if (!toggle || !navigation) {
+            return;
+        }
+
+        const sectionLinks = [...navigation.querySelectorAll('a[href^="#"]')];
+        const trackedSections = ['home', 'about', 'features', 'team', 'contact']
+            .map((id) => document.getElementById(id))
+            .filter(Boolean);
+
+        const updateActiveLink = (activeHash) => {
+            sectionLinks.forEach((link) => {
+                if (link.getAttribute('href') === activeHash) {
+                    link.setAttribute('aria-current', 'page');
+                } else {
+                    link.removeAttribute('aria-current');
+                }
+            });
+        };
+
+        const updateActiveSection = () => {
+            const header = document.querySelector('.public-header');
+            const activationPoint = window.scrollY
+                + (header ? header.getBoundingClientRect().height : 0)
+                + window.innerHeight * 0.3;
+            let currentSection = trackedSections[0];
+
+            trackedSections.forEach((section) => {
+                const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+                if (sectionTop <= activationPoint) {
+                    currentSection = section;
+                }
+            });
+
+            const activeId = currentSection && currentSection.id === 'features'
+                ? 'about'
+                : (currentSection ? currentSection.id : 'home');
+            updateActiveLink(`#${activeId}`);
+        };
+
+        updateActiveSection();
+        window.addEventListener('scroll', updateActiveSection, { passive: true });
+        window.addEventListener('resize', updateActiveSection);
+        window.addEventListener('hashchange', () => window.setTimeout(updateActiveSection, 0));
+        window.addEventListener('load', updateActiveSection, { once: true });
+        window.setTimeout(updateActiveSection, 100);
+        if ('IntersectionObserver' in window) {
+            const sectionObserver = new IntersectionObserver(updateActiveSection, {
+                rootMargin: '-20% 0px -65% 0px',
+                threshold: 0,
+            });
+            trackedSections.forEach((section) => sectionObserver.observe(section));
+        }
+
+        const closeMenu = () => {
+            navigation.removeAttribute('data-open');
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.setAttribute('aria-label', 'Open menu');
+        };
+
+        toggle.addEventListener('click', () => {
+            const isOpen = navigation.hasAttribute('data-open');
+            if (isOpen) {
+                closeMenu();
+            } else {
+                navigation.setAttribute('data-open', 'true');
+                toggle.setAttribute('aria-expanded', 'true');
+                toggle.setAttribute('aria-label', 'Close menu');
+            }
+        });
+        navigation.addEventListener('click', (event) => {
+            const link = event.target.closest('a');
+            if (link) {
+                closeMenu();
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && navigation.hasAttribute('data-open')) {
+                closeMenu();
+                toggle.focus();
+            }
+        });
+    })();
+    </script>
+</body>
+</html>
+<?php
+    exit;
+endif;
+
+require_once __DIR__ . '/backend/auth_init.php';
 require_staywise_login();
 $currentUser = $_SESSION['staywise_user'];
 $ownerId = (int) $currentUser['owner_id'];
@@ -133,7 +418,7 @@ if ($currentUser['role'] === 'tenant') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>StayWise · Dashboard</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=20261015">
+    <link rel="stylesheet" href="assets/css/style.css?v=20261022-no-sidebar-icons">
 </head>
 <body>
     <?php require __DIR__ . '/Include/sidebar.php'; ?>

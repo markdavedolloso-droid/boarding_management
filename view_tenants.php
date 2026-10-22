@@ -5,7 +5,7 @@ $activePage = 'tenants';
 require_once __DIR__ . '/classes/Tenant.php';
 
 $keyword = trim($_GET['keyword'] ?? '');
-$tenant = new Tenant($pdo);
+$tenant = new Tenant();
 $tenants = $keyword !== ''
     ? $tenant->searchTenants($keyword, (int) $_SESSION['staywise_user']['owner_id'])
     : $tenant->getTenants((int) $_SESSION['staywise_user']['owner_id']);
@@ -21,7 +21,7 @@ $editTenant = $editTenantId !== false && $editTenantId > 0
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <title>All Tenants</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=20261015">
+    <link rel="stylesheet" href="assets/css/style.css?v=20261022-no-sidebar-icons">
 </head>
 <body>
     <?php require __DIR__ . '/Include/sidebar.php'; ?>

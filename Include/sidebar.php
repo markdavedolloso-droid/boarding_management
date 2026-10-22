@@ -2,8 +2,14 @@
 $activePage = $activePage ?? '';
 $currentUser = $_SESSION['staywise_user'] ?? [];
 ?>
-<nav aria-label="Main navigation">
-    <a href="index.php" class="<?= $activePage === 'overview' ? 'active' : '' ?>" <?= $activePage === 'overview' ? 'aria-current="page"' : '' ?>>Overview</a>
+<button class="nav-toggle" type="button" aria-controls="main-navigation" aria-expanded="false" aria-label="Open navigation menu">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+<button class="nav-backdrop" type="button" aria-label="Close navigation menu" hidden></button>
+<nav id="main-navigation" aria-label="Main navigation">
+    <a href="index.php" class="<?= $activePage === 'overview' ? 'active' : '' ?>" <?= $activePage === 'overview' ? 'aria-current="page"' : '' ?>>Dashboard</a>
     <?php if (($currentUser['role'] ?? '') === 'owner'): ?>
         <a href="view_tenants.php" class="<?= $activePage === 'tenants' ? 'active' : '' ?>" <?= $activePage === 'tenants' ? 'aria-current="page"' : '' ?>>Tenants</a>
         <a href="rooms.php" class="<?= $activePage === 'rooms' ? 'active' : '' ?>" <?= $activePage === 'rooms' ? 'aria-current="page"' : '' ?>>Rooms</a>
@@ -25,3 +31,48 @@ $currentUser = $_SESSION['staywise_user'] ?? [];
         </form>
     </div>
 </nav>
+<script>
+(() => {
+    const navigation = document.getElementById('main-navigation');
+    const toggle = document.querySelector('.nav-toggle');
+    const backdrop = document.querySelector('.nav-backdrop');
+
+    if (!navigation || !toggle || !backdrop) {
+        return;
+    }
+
+    const closeMenu = () => {
+        navigation.removeAttribute('data-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Open navigation menu');
+        backdrop.hidden = true;
+    };
+
+    toggle.addEventListener('click', () => {
+        const isOpen = navigation.hasAttribute('data-open');
+        if (isOpen) {
+            closeMenu();
+            return;
+        }
+
+        navigation.setAttribute('data-open', 'true');
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', 'Close navigation menu');
+        backdrop.hidden = false;
+        navigation.querySelector('a')?.focus();
+    });
+
+    backdrop.addEventListener('click', closeMenu);
+    navigation.addEventListener('click', (event) => {
+        if (event.target.closest('a')) {
+            closeMenu();
+        }
+    });
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && navigation.hasAttribute('data-open')) {
+            closeMenu();
+            toggle.focus();
+        }
+    });
+})();
+</script>

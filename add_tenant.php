@@ -30,7 +30,7 @@ if (!verify_staywise_csrf()) {
 } elseif (!in_array($data['gender'], ['Male', 'Female', 'Other'], true)) {
     $error = 'Select a valid gender.';
 } else {
-    $tenant = new Tenant($pdo);
+    $tenant = new Tenant();
     if ($tenant->addTenant((int) $_SESSION['staywise_user']['owner_id'], $data)) {
         log_staywise_activity('Added tenant ' . $data['first_name'] . ' ' . $data['last_name']);
         $_SESSION['tenant_flash_success'] = 'Tenant added successfully.';
