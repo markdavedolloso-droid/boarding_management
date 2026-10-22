@@ -27,7 +27,10 @@ $currentUser = $_SESSION['staywise_user'] ?? [];
         <span class="sidebar-user"><?= htmlspecialchars($currentUser['name'] ?? 'User', ENT_QUOTES, 'UTF-8') ?></span>
         <form class="sidebar-form" method="POST" action="logout.php" onsubmit="return confirm('Are you sure you want to log out?');">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
-            <button class="sidebar-logout" type="submit">Log out</button>
+            <button class="sidebar-logout" type="submit">
+                <iconify-icon class="sidebar-logout-icon" icon="lucide:log-out" aria-hidden="true"></iconify-icon>
+                <span>Log out</span>
+            </button>
         </form>
     </div>
 </nav>

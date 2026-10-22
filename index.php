@@ -18,8 +18,11 @@ if (empty($_SESSION['staywise_user'])):
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="StayWise makes boarding house management easier with organized tenant records, rooms, rental contracts, and payments.">
     <title>StayWise · Boarding house management</title>
-    <link rel="stylesheet" href="assets/css/style.css?v=20261022-no-sidebar-icons">
-    <link rel="stylesheet" href="assets/css/landing.css?v=20261021-orbit3">
+    <link rel="stylesheet" href="assets/css/style.css?v=20261022-button-hover">
+    <link rel="stylesheet" href="assets/css/landing.css?v=20261022-seamless-feature-loop">
+    <link rel="stylesheet" href="assets/css/theme.css?v=20261022-home-nav-theme">
+    <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js" defer></script>
+    <script src="assets/js/theme.js?v=20261022-iconify"></script>
 </head>
 <body class="landing-page">
     <header class="public-header">
@@ -37,6 +40,9 @@ if (empty($_SESSION['staywise_user'])):
             <span></span><span></span><span></span>
         </button>
         <nav class="public-nav" id="public-navigation" aria-label="Main navigation">
+            <button class="theme-toggle public-theme-toggle" type="button" data-theme-toggle aria-label="Switch to light mode">
+                <iconify-icon class="theme-toggle-icon" icon="lucide:sun" aria-hidden="true"></iconify-icon>
+            </button>
             <a href="#home" aria-current="page">Home</a>
             <a href="#about">About</a>
             <a href="#team">Team</a>
@@ -58,38 +64,55 @@ if (empty($_SESSION['staywise_user'])):
                 </div>
             </div>
             <div class="landing-visual" aria-label="Illustration of a well-managed boarding house" role="img">
+                <span class="landing-orbit landing-orbit-outer" aria-hidden="true"></span>
+                <span class="landing-orbit landing-orbit-outer-wide" aria-hidden="true"></span>
+                <span class="landing-orbit landing-orbit-outer-oval" aria-hidden="true"></span>
+                <span class="landing-orbit" aria-hidden="true"></span>
+                <span class="landing-orbit landing-orbit-inner-oval" aria-hidden="true"></span>
+                <span class="landing-orbit landing-orbit-inner" aria-hidden="true"></span>
+                <span class="landing-orbit landing-orbit-small" aria-hidden="true"></span>
                 <span class="landing-float landing-float-one">Rooms &amp; tenants, together</span>
                 <span class="landing-float landing-float-two">Your property at a glance</span>
                 <svg class="landing-building" viewBox="0 0 520 390" fill="none" aria-hidden="true">
-                    <ellipse cx="264" cy="351" rx="174" ry="19" fill="#063b2b" fill-opacity=".75"/>
-                    <path d="M111 151 259 48l151 103" stroke="#19bd83" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M137 143v183h243V143" fill="#082c21" stroke="#16875f" stroke-width="2.5"/>
-                    <path d="M165 170h71v66h-71zM281 170h71v66h-71z" fill="#0d5640" stroke="#27c994" stroke-width="2"/>
-                    <path d="M174 181h52M174 191h52M290 181h52M290 191h52" stroke="#80e6bf" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M224 326v-70a36 36 0 0 1 72 0v70" fill="#0b7957" stroke="#27c994" stroke-width="2.5"/>
-                    <path d="M244 288h32" stroke="#c6f8df" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M179 276h30v50h-30zM320 276h30v50h-30z" fill="#0b4032" stroke="#1db77f" stroke-width="2"/>
-                    <path d="M162 143h205" stroke="#31d29a" stroke-opacity=".3" stroke-width="2"/>
-                    <path d="M99 327h286" stroke="#2bbd8a" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
-                    <circle cx="403" cy="96" r="28" fill="#09241d" stroke="#1aa979" stroke-opacity=".7"/>
-                    <path d="M396 96h14M403 89v14" stroke="#45dfae" stroke-width="2" stroke-linecap="round"/>
-                    <circle cx="105" cy="207" r="20" fill="#09241d" stroke="#1aa979" stroke-opacity=".65"/>
-                    <path d="M98 207h14M105 200v14" stroke="#45dfae" stroke-width="2" stroke-linecap="round"/>
-                    <circle cx="372" cy="263" r="3" fill="#44dfa9"/>
-                    <circle cx="389" cy="263" r="3" fill="#44dfa9" fill-opacity=".55"/>
-                    <circle cx="406" cy="263" r="3" fill="#44dfa9" fill-opacity=".3"/>
+                    <ellipse class="building-shadow" cx="264" cy="351" rx="174" ry="19" fill="#063b2b" fill-opacity=".75"/>
+                    <path class="building-roof" d="M111 151 259 48l151 103" stroke="#19bd83" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path class="building-body" d="M137 143v183h243V143" fill="#082c21" stroke="#16875f" stroke-width="2.5"/>
+                    <path class="building-windows" d="M165 170h71v66h-71zM281 170h71v66h-71z" fill="#0d5640" stroke="#27c994" stroke-width="2"/>
+                    <path class="building-window-lines" d="M174 181h52M174 191h52M290 181h52M290 191h52" stroke="#80e6bf" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>
+                    <path class="building-door" d="M224 326v-70a36 36 0 0 1 72 0v70" fill="#0b7957" stroke="#27c994" stroke-width="2.5"/>
+                    <path class="building-door-handle" d="M244 288h32" stroke="#c6f8df" stroke-width="3" stroke-linecap="round"/>
+                    <path class="building-side-windows" d="M179 276h30v50h-30zM320 276h30v50h-30z" fill="#0b4032" stroke="#1db77f" stroke-width="2"/>
+                    <path class="building-facade-line" d="M162 143h205" stroke="#31d29a" stroke-opacity=".3" stroke-width="2"/>
+                    <path class="building-ground-line" d="M99 327h286" stroke="#2bbd8a" stroke-opacity=".55" stroke-width="3" stroke-linecap="round"/>
+                    <circle class="building-badge" cx="403" cy="96" r="28" fill="#09241d" stroke="#1aa979" stroke-opacity=".7"/>
+                    <path class="building-badge-plus" d="M396 96h14M403 89v14" stroke="#45dfae" stroke-width="2" stroke-linecap="round"/>
+                    <circle class="building-badge" cx="105" cy="207" r="20" fill="#09241d" stroke="#1aa979" stroke-opacity=".65"/>
+                    <path class="building-badge-plus" d="M98 207h14M105 200v14" stroke="#45dfae" stroke-width="2" stroke-linecap="round"/>
+                    <circle class="building-sparkle" cx="372" cy="263" r="3" fill="#44dfa9"/>
+                    <circle class="building-sparkle" cx="389" cy="263" r="3" fill="#44dfa9" fill-opacity=".55"/>
+                    <circle class="building-sparkle" cx="406" cy="263" r="3" fill="#44dfa9" fill-opacity=".3"/>
                 </svg>
             </div>
         </section>
 
         <div class="landing-ribbon" aria-label="StayWise features">
             <div class="landing-ribbon-inner">
-                <span>Tenant records</span>
-                <span>Room management</span>
-                <span>Rental contracts</span>
-                <span>Payment tracking</span>
-                <span>Useful reports</span>
-                <span>Tenant updates</span>
+                <div class="landing-ribbon-group">
+                    <span>Tenant records</span>
+                    <span>Room management</span>
+                    <span>Rental contracts</span>
+                    <span>Payment tracking</span>
+                    <span>Useful reports</span>
+                    <span>Tenant updates</span>
+                </div>
+                <div class="landing-ribbon-group" aria-hidden="true">
+                    <span>Tenant records</span>
+                    <span>Room management</span>
+                    <span>Rental contracts</span>
+                    <span>Payment tracking</span>
+                    <span>Useful reports</span>
+                    <span>Tenant updates</span>
+                </div>
             </div>
         </div>
 
@@ -187,8 +210,33 @@ if (empty($_SESSION['staywise_user'])):
     </main>
 
     <footer class="public-footer">
-        <a class="public-brand" href="#home"><span>StayWise</span></a>
-        <p>Boarding house management, made simpler.</p>
+        <div class="public-footer-main">
+            <div class="public-footer-brand">
+                <a class="public-brand" href="#home"><span>StayWise</span></a>
+                <p>StayWise helps boarding house owners keep rooms, tenants, rental contracts, payments, and utility bills organized in one place. Tenants can stay informed through their own portal.</p>
+            </div>
+            <div class="public-footer-column">
+                <h2>Explore</h2>
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#team">Team</a>
+                <a href="#contact">Contact</a>
+                <a href="login.php">Log in</a>
+            </div>
+            <div class="public-footer-column public-footer-platform">
+                <h2>Platform</h2>
+                <div>
+                    <span>Tenant and room management</span>
+                    <span>Rental contracts and occupancy</span>
+                    <span>Rent and utility tracking</span>
+                    <span>Tenant notifications and reports</span>
+                </div>
+            </div>
+        </div>
+        <div class="public-footer-bottom">
+            <a class="public-brand" href="#home"><span>StayWise</span></a>
+            <p>© <?= date('Y') ?> StayWise. All rights reserved.</p>
+        </div>
     </footer>
 
     <script>
@@ -419,6 +467,9 @@ if ($currentUser['role'] === 'tenant') {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>StayWise · Dashboard</title>
     <link rel="stylesheet" href="assets/css/style.css?v=20261022-no-sidebar-icons">
+    <link rel="stylesheet" href="assets/css/theme.css?v=20261022-home-nav-theme">
+    <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js" defer></script>
+    <script src="assets/js/theme.js?v=20261022-iconify"></script>
 </head>
 <body>
     <?php require __DIR__ . '/Include/sidebar.php'; ?>
@@ -431,6 +482,9 @@ if ($currentUser['role'] === 'tenant') {
                     <a class="button secondary" href="view_tenants.php">⌕ Search records</a>
                 <?php endif; ?>
                 <span class="topbar-user"><?= htmlspecialchars($currentUser['name'], ENT_QUOTES, 'UTF-8') ?></span>
+                <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light mode">
+                    <iconify-icon class="theme-toggle-icon" icon="lucide:sun" aria-hidden="true"></iconify-icon>
+                </button>
             </div>
         </header>
 

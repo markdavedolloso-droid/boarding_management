@@ -12,17 +12,9 @@
         window.history.replaceState(
             null,
             '',
-            window.location.pathname + (query ? `?${query}` : '') +             window.location.hash
+            window.location.pathname + (query ? `?${query}` : '') + window.location.hash
         );
 
-        if (!motionPreference.matches) {
-            card.addEventListener('animationend', (event) => {
-                if (event.animationName === 'auth-card-flip-in') {
-                    card.classList.remove('auth-card-entering');
-                }
-            }, { once: true });
-            card.classList.add('auth-card-entering');
-        }
     }
 
     if (motionPreference.matches) {
@@ -46,9 +38,6 @@
 
         event.preventDefault();
         destination.searchParams.set('transition', 'flip');
-        card.classList.add('auth-card-leaving');
-        window.setTimeout(() => {
-            window.location.assign(destination.href);
-        }, 380);
+        window.location.assign(destination.href);
     });
 })();

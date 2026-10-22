@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/backend/auth_init.php';
+require_once __DIR__ . '/Transaction.php';
 require_staywise_owner();
 $activePage = 'payments';
 $ownerId = (int) $_SESSION['staywise_user']['owner_id'];
@@ -25,61 +26,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = 'Enter a valid contract, payment date, billing month, amount, and payment method.';
         } else {
             try {
-                $pdo->beginTransaction();
-                $stmt = $pdo->prepare(
-                    "SELECT c.contract_id, c.monthly_rent
-                     FROM rental_contracts c
-                     WHERE c.contract_id = :contract_id AND c.owner_id = :owner_id
-                       AND c.contract_status IN ('active', 'ended') FOR UPDATE"
-                );
-                $stmt->execute([':contract_id' => $contractId, ':owner_id' => $ownerId]);
-                $contract = $stmt->fetch();
-                if (!$contract) {
-                    throw new DomainException('Choose a contract belonging to your property.');
-                }
+                $transaction = new Transaction($pdo);
+                $paymentId = $transaction->run(
+                    function (PDO $connection) use (
+                        $contractId,
+                        $ownerId,
+                        $billingMonthInput,
+                        $amount,
+                        $paymentDate,
+                        $paymentMethod
+                    ): int {
+                        $stmt = $connection->prepare(
+                            "SELECT c.contract_id, c.monthly_rent
+                             FROM rental_contracts c
+                             WHERE c.contract_id = :contract_id AND c.owner_id = :owner_id
+                               AND c.contract_status IN ('active', 'ended') FOR UPDATE"
+                        );
+                        $stmt->execute([':contract_id' => $contractId, ':owner_id' => $ownerId]);
+                        $contract = $stmt->fetch();
+                        if (!$contract) {
+                            throw new DomainException('Choose a contract belonging to your property.');
+                        }
 
-                $stmt = $pdo->prepare(
-                    "SELECT COALESCE(SUM(amount), 0) FROM payments
-                     WHERE owner_id = :owner_id AND contract_id = :contract_id
-                       AND billing_month = :billing_month AND payment_status = 'paid'"
-                );
-                $stmt->execute([
-                    ':owner_id' => $ownerId,
-                    ':contract_id' => $contractId,
-                    ':billing_month' => $billingMonthInput,
-                ]);
-                $paid = (float) $stmt->fetchColumn();
-                if ($paid + $amount > (float) $contract['monthly_rent'] + 0.001) {
-                    throw new DomainException('This payment exceeds the remaining rent for the selected month.');
-                }
+                        $stmt = $connection->prepare(
+                            "SELECT COALESCE(SUM(amount), 0) FROM payments
+                             WHERE owner_id = :owner_id AND contract_id = :contract_id
+                               AND billing_month = :billing_month AND payment_status = 'paid'"
+                        );
+                        $stmt->execute([
+                            ':owner_id' => $ownerId,
+                            ':contract_id' => $contractId,
+                            ':billing_month' => $billingMonthInput,
+                        ]);
+                        $paid = (float) $stmt->fetchColumn();
+                        if ($paid + $amount > (float) $contract['monthly_rent'] + 0.001) {
+                            throw new DomainException('This payment exceeds the remaining rent for the selected month.');
+                        }
 
-                $stmt = $pdo->prepare(
-                    "INSERT INTO payments
-                        (owner_id, contract_id, payment_date, billing_month, amount, payment_method, payment_status)
-                     VALUES (:owner_id, :contract_id, :payment_date, :billing_month, :amount, :payment_method, 'paid')"
+                        $stmt = $connection->prepare(
+                            "INSERT INTO payments
+                                (owner_id, contract_id, payment_date, billing_month, amount, payment_method, payment_status)
+                             VALUES (:owner_id, :contract_id, :payment_date, :billing_month, :amount, :payment_method, 'paid')"
+                        );
+                        $stmt->execute([
+                            ':owner_id' => $ownerId,
+                            ':contract_id' => $contractId,
+                            ':payment_date' => $paymentDate,
+                            ':billing_month' => $billingMonthInput,
+                            ':amount' => $amount,
+                            ':payment_method' => $paymentMethod,
+                        ]);
+
+                        return (int) $connection->lastInsertId();
+                    }
                 );
-                $stmt->execute([
-                    ':owner_id' => $ownerId,
-                    ':contract_id' => $contractId,
-                    ':payment_date' => $paymentDate,
-                    ':billing_month' => $billingMonthInput,
-                    ':amount' => $amount,
-                    ':payment_method' => $paymentMethod,
-                ]);
-                $paymentId = (int) $pdo->lastInsertId();
-                $pdo->commit();
                 log_staywise_activity('Recorded payment #' . $paymentId . ' for contract #' . $contractId);
                 $message = 'Payment recorded successfully.';
             } catch (DomainException $e) {
-                if ($pdo->inTransaction()) {
-                    $pdo->rollBack();
-                }
                 $message = $e->getMessage();
-            } catch (PDOException $e) {
-                if ($pdo->inTransaction()) {
-                    $pdo->rollBack();
-                }
-                throw $e;
             }
         }
     }
@@ -113,11 +117,14 @@ $payments = $stmt->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Payments · StayWise</title>
     <link rel="stylesheet" href="assets/css/style.css?v=20261022-no-sidebar-icons">
+    <link rel="stylesheet" href="assets/css/theme.css?v=20261022-home-nav-theme">
+    <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js" defer></script>
+    <script src="assets/js/theme.js?v=20261022-iconify"></script>
 </head>
 <body>
     <?php require __DIR__ . '/Include/sidebar.php'; ?>
     <main class="home-content">
-        <header class="topbar"><p class="topbar-label">StayWise <span aria-hidden="true">/</span> Payments</p><span class="topbar-user"><?= htmlspecialchars($_SESSION['staywise_user']['name'], ENT_QUOTES, 'UTF-8') ?></span></header>
+        <header class="topbar"><p class="topbar-label">StayWise <span aria-hidden="true">/</span> Payments</p><div class="topbar-actions"><span class="topbar-user"><?= htmlspecialchars($_SESSION['staywise_user']['name'], ENT_QUOTES, 'UTF-8') ?></span><button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light mode"><iconify-icon class="theme-toggle-icon" icon="lucide:sun" aria-hidden="true"></iconify-icon></button></div></header>
         <div class="page-head"><div><p class="eyebrow">Financial management</p><h1>Rental payments</h1><p>Record full or partial rent payments by contract and billing month.</p></div></div>
         <?php if ($message !== ''): ?><div class="alert" role="status"><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></div><?php endif; ?>
         <section class="panel">

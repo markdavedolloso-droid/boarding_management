@@ -126,11 +126,14 @@ $payments = $stmt->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Reports · StayWise</title>
     <link rel="stylesheet" href="assets/css/style.css?v=20261022-no-sidebar-icons">
+    <link rel="stylesheet" href="assets/css/theme.css?v=20261022-home-nav-theme">
+    <script src="https://code.iconify.design/iconify-icon/2.3.0/iconify-icon.min.js" defer></script>
+    <script src="assets/js/theme.js?v=20261022-iconify"></script>
 </head>
 <body>
     <?php require __DIR__ . '/Include/sidebar.php'; ?>
     <main class="home-content">
-        <header class="topbar"><p class="topbar-label">StayWise <span aria-hidden="true">/</span> Reports</p><span class="topbar-user"><?= htmlspecialchars($_SESSION['staywise_user']['name'], ENT_QUOTES, 'UTF-8') ?></span></header>
+        <header class="topbar"><p class="topbar-label">StayWise <span aria-hidden="true">/</span> Reports</p><div class="topbar-actions"><span class="topbar-user"><?= htmlspecialchars($_SESSION['staywise_user']['name'], ENT_QUOTES, 'UTF-8') ?></span><button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch to light mode"><iconify-icon class="theme-toggle-icon" icon="lucide:sun" aria-hidden="true"></iconify-icon></button></div></header>
         <div class="page-head"><div><p class="eyebrow">Property insights</p><h1>Reports</h1><p>Review rental income, occupancy, and utility billing.</p></div></div>
         <?php if ($error !== ''): ?><div class="alert" role="alert"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div><?php endif; ?>
         <section class="panel">
